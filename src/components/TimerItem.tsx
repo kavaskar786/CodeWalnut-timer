@@ -4,10 +4,12 @@ import { Timer } from "../types/timer";
 import { formatTime } from "../utils/time";
 import { useTimerStore } from "../store/useTimerStore";
 import { toast } from "sonner";
-import { EditTimerModal } from "./EditTimerModal";
+
 import { TimerAudio } from "../utils/audio";
 import { TimerControls } from "./TimerControls";
 import { TimerProgress } from "./TimerProgress";
+import { Button } from "./Button";
+import { TimerModal } from "./TimerModal";
 
 interface TimerItemProps {
   timer: Timer;
@@ -24,10 +26,12 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
 
   useEffect(() => {
     let interval: number | null = null;
-    if (timer.isRunning) {
+
+    if (timer.isRunning && timer.remainingTime > 0) {
       interval = window.setInterval(() => {
         updateTimer(timer.id);
 
+        // Check if timer just ended
         if (timer.remainingTime <= 1 && !hasEndedRef.current) {
           hasEndedRef.current = true;
           const audioInstance = timerAudio.play();
@@ -49,6 +53,7 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
           );
         }
       }, 1000);
+
       intervalRef.current = interval;
     }
 
@@ -58,7 +63,7 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
         intervalRef.current = null;
       }
     };
-  }, [timer.isRunning, timer.id, timer.remainingTime, timer.title, timerAudio]);
+  }, [timer.isRunning, timer.remainingTime, timer.id, timer.title]);
 
   const handleToggle = () => {
     if (timer.remainingTime <= 0) {
@@ -130,27 +135,25 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
               <p className="text-gray-600 mt-1">{timer.description}</p>
             </div>
             <div className="flex gap-2">
-              <button
+              <Button
+                variant="icon"
+                icon={Pencil}
                 onClick={() => setIsEditModalOpen(true)}
-                className="p-2 rounded-full hover:bg-blue-50 text-blue-500 transition-colors"
                 title="Edit Timer"
-              >
-                <Pencil className="w-5 h-5" />
-              </button>
-              <button
+              />
+              <Button
+                variant="icon"
+                icon={RotateCcw}
                 onClick={handleRestart}
-                className="p-2 rounded-full hover:bg-blue-50 text-blue-500 transition-colors"
                 title="Restart Timer"
-              >
-                <RotateCcw className="w-5 h-5" />
-              </button>
-              <button
+              />
+              <Button
+                variant="icon"
+                icon={Trash2}
                 onClick={handleDelete}
-                className="p-2 rounded-full hover:bg-red-50 text-red-500 transition-colors"
+                className="text-red-500 hover:bg-red-50"
                 title="Delete Timer"
-              >
-                <Trash2 className="w-5 h-5" />
-              </button>
+              />
             </div>
           </div>
           <div className="flex flex-col items-center mt-6">
@@ -173,9 +176,10 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
         </div>
       </div>
 
-      <EditTimerModal
+      <TimerModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
+        mode="edit"
         timer={timer}
       />
     </>
