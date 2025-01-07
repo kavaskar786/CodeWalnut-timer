@@ -62,8 +62,10 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
     return () => {
       if (interval) {
         clearInterval(interval);
+
         intervalRef.current = null;
       }
+      TimerAudio.getInstance().stop();
     };
   }, [timer.isRunning, timer.remainingTime, timer.id, timer.title]);
 
