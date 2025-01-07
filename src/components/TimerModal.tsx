@@ -5,6 +5,7 @@ import { useTimerStore } from "../store/useTimerStore";
 import { validateTimerForm } from "../utils/validation";
 import { Timer } from "../types/timer";
 import { Button } from "./Button";
+import { getToastPosition } from "../utils/toast";
 
 interface TimerModalProps {
   isOpen: boolean;
@@ -12,11 +13,6 @@ interface TimerModalProps {
   timer?: Timer;
   mode: "add" | "edit";
 }
-
-// Helper function for toast positioning
-const getToastPosition = (): "top-right" | "bottom-center" => {
-  return window.innerWidth >= 768 ? "top-right" : "bottom-center";
-};
 
 export const TimerModal: React.FC<TimerModalProps> = ({
   isOpen,
