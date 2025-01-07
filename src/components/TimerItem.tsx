@@ -20,52 +20,80 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
   const intervalRef = useRef<number | null>(null);
   const timerAudio = TimerAudio.getInstance();
   const hasEndedRef = useRef(false);
+  const toastIdRef = useRef<string | number | null>(null);
 
   useEffect(() => {
+    let interval: number | null = null;
     if (timer.isRunning) {
-      intervalRef.current = window.setInterval(() => {
+      interval = window.setInterval(() => {
         updateTimer(timer.id);
 
         if (timer.remainingTime <= 1 && !hasEndedRef.current) {
           hasEndedRef.current = true;
-          timerAudio.play().catch(console.error);
+          const audioInstance = timerAudio.play();
 
-          toast.success(`Timer "${timer.title}" has ended!`, {
-            duration: 5000,
-            action: {
-              label: "Dismiss",
-              onClick: () => timerAudio.stop(),
-            },
-          });
+          toastIdRef.current = toast.success(
+            `Timer "${timer.title}" has ended!`,
+            {
+              duration: Infinity,
+              action: {
+                label: "Dismiss",
+                onClick: () => {
+                  audioInstance.then((instance) => instance.stop());
+                  if (toastIdRef.current) {
+                    toast.dismiss(toastIdRef.current);
+                  }
+                },
+              },
+            }
+          );
         }
       }, 1000);
+      intervalRef.current = interval;
     }
 
-    return () => clearInterval(intervalRef.current!);
-  }, [
-    timer.isRunning,
-    timer.id,
-    timer.remainingTime,
-    timer.title,
-    timerAudio,
-    updateTimer,
-  ]);
-
-  const handleRestart = () => {
-    hasEndedRef.current = false;
-    restartTimer(timer.id);
-  };
-
-  const handleDelete = () => {
-    timerAudio.stop();
-    deleteTimer(timer.id);
-  };
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+        intervalRef.current = null;
+      }
+    };
+  }, [timer.isRunning, timer.id, timer.remainingTime, timer.title, timerAudio]);
 
   const handleToggle = () => {
     if (timer.remainingTime <= 0) {
       hasEndedRef.current = false;
+      restartTimer(timer.id);
+    } else {
+      toggleTimer(timer.id);
     }
-    toggleTimer(timer.id);
+  };
+
+  const handleRestart = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    hasEndedRef.current = false;
+    if (toastIdRef.current) {
+      toast.dismiss(toastIdRef.current);
+      toastIdRef.current = null;
+    }
+    timerAudio.stop();
+    restartTimer(timer.id);
+  };
+
+  const handleDelete = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    if (toastIdRef.current) {
+      toast.dismiss(toastIdRef.current);
+      toastIdRef.current = null;
+    }
+    timerAudio.stop();
+    deleteTimer(timer.id);
   };
 
   return (
