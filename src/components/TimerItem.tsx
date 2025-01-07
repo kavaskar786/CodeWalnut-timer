@@ -10,6 +10,7 @@ import { TimerControls } from "./TimerControls";
 import { TimerProgress } from "./TimerProgress";
 import { Button } from "./Button";
 import { TimerModal } from "./TimerModal";
+import { getToastPosition } from "../utils/toast";
 
 interface TimerItemProps {
   timer: Timer;
@@ -49,6 +50,7 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
                   }
                 },
               },
+              position: getToastPosition(),
             }
           );
         }
