@@ -2,9 +2,29 @@ import { configureStore, createSlice } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
 import { Timer } from "../types/timer";
 
-const initialState = {
-  timers: [] as Timer[],
+const loadState = () => {
+  try {
+    const serializedState = localStorage.getItem("timerState");
+    if (serializedState === null) {
+      return { timers: [] };
+    }
+    return JSON.parse(serializedState);
+  } catch (err) {
+    console.error("Error loading state from localStorage:", err);
+    return { timers: [] };
+  }
 };
+
+const saveState = (state: { timers: Timer[] }) => {
+  try {
+    const serializedState = JSON.stringify(state);
+    localStorage.setItem("timerState", serializedState);
+  } catch (err) {
+    console.error("Error saving state to localStorage:", err);
+  }
+};
+
+const initialState = loadState();
 
 const timerSlice = createSlice({
   name: "timer",
@@ -16,40 +36,58 @@ const timerSlice = createSlice({
         id: crypto.randomUUID(),
         createdAt: Date.now(),
       });
+      saveState(state);
     },
     deleteTimer: (state, action) => {
       state.timers = state.timers.filter(
-        (timer) => timer.id !== action.payload
+        (timer: Timer) => timer.id !== action.payload
       );
+      saveState(state);
     },
     toggleTimer: (state, action) => {
-      const timer = state.timers.find((timer) => timer.id === action.payload);
+      const timer = state.timers.find(
+        (timer: Timer) => timer.id === action.payload
+      );
       if (timer) {
-        timer.isRunning = !timer.isRunning;
+        if (timer.remainingTime > 0) {
+          timer.isRunning = !timer.isRunning;
+        } else {
+          timer.isRunning = false;
+        }
       }
+      saveState(state);
     },
     updateTimer: (state, action) => {
-      const timer = state.timers.find((timer) => timer.id === action.payload);
-      if (timer && timer.isRunning) {
-        timer.remainingTime -= 1;
-        timer.isRunning = timer.remainingTime > 0;
+      const timer = state.timers.find(
+        (timer: Timer) => timer.id === action.payload
+      );
+      if (timer && timer.isRunning && timer.remainingTime > 0) {
+        timer.remainingTime = Math.max(0, timer.remainingTime - 1);
+        if (timer.remainingTime === 0) {
+          timer.isRunning = false;
+        }
+        saveState(state);
       }
     },
     restartTimer: (state, action) => {
-      const timer = state.timers.find((timer) => timer.id === action.payload);
+      const timer = state.timers.find(
+        (timer: Timer) => timer.id === action.payload
+      );
       if (timer) {
         timer.remainingTime = timer.duration;
         timer.isRunning = false;
+        saveState(state);
       }
     },
     editTimer: (state, action) => {
       const timer = state.timers.find(
-        (timer) => timer.id === action.payload.id
+        (timer: Timer) => timer.id === action.payload.id
       );
       if (timer) {
         Object.assign(timer, action.payload.updates);
         timer.remainingTime = action.payload.updates.duration || timer.duration;
         timer.isRunning = false;
+        saveState(state);
       }
     },
   },
@@ -57,6 +95,11 @@ const timerSlice = createSlice({
 
 const store = configureStore({
   reducer: timerSlice.reducer,
+  preloadedState: initialState,
+});
+
+store.subscribe(() => {
+  saveState(store.getState());
 });
 
 export { store };
