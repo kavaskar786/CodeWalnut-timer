@@ -4,6 +4,8 @@ A feature-rich Timer App built using React, Vite, Tailwind CSS, and Vitest. This
 
 ---
 
+Check here the [demo](https://codewalnut-timer.onrender.com/)
+
 ## **Features**
 
 - **Simultaneous Timers**: Run and manage multiple timers concurrently.
