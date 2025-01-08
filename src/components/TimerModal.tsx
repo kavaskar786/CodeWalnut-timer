@@ -68,6 +68,7 @@ export const TimerModal: React.FC<TimerModalProps> = ({
       toast.error("Please enter a valid title", {
         position: getToastPosition(),
       });
+      setTouched({ ...touched, title: true });
       return;
     }
 
@@ -75,6 +76,7 @@ export const TimerModal: React.FC<TimerModalProps> = ({
       toast.error("Please set a valid duration", {
         position: getToastPosition(),
       });
+      setTouched({ ...touched, hours: true, minutes: true, seconds: true });
       return;
     }
 
