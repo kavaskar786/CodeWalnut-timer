@@ -6,6 +6,22 @@ A feature-rich Timer App built using React, Vite, Tailwind CSS, and Vitest. This
 
 Check here the [demo](https://codewalnut-timer.onrender.com/)
 
+---
+
+## **Sample Screenshots**
+
+### **Simultaneous Timers**
+
+![Simultaneous Timers Screenshot](https://github.com/kavaskar786/CodeWalnut-timer/blob/2a9e41aa7256dbddbca4efd8160bc5e5b42458a0/src/images/Screenshot%202025-01-08%20101136.png)
+
+### **Snack Bar Notifications**
+
+![Snack Bar Screenshot](https://github.com/kavaskar786/CodeWalnut-timer/blob/2a9e41aa7256dbddbca4efd8160bc5e5b42458a0/src/images/Screenshot%202025-01-08%20100639.png)
+
+### **Add/Edit Timer Modal**
+
+![Modal Screenshot](https://github.com/kavaskar786/CodeWalnut-timer/blob/2a9e41aa7256dbddbca4efd8160bc5e5b42458a0/src/images/Screenshot%202025-01-08%20101136.png)
+
 ## **Features**
 
 - **Simultaneous Timers**: Run and manage multiple timers concurrently.
@@ -48,65 +64,6 @@ Check here the [demo](https://codewalnut-timer.onrender.com/)
    ```bash
    npm vitest
    ```
-
----
-
-## **Implemented Features**
-
-### 1. **Simultaneous Timers**
-
-- Updated the app to allow multiple timers to run concurrently, ensuring each timer operates independently.
-
-### 2. **Snack Bar Notifications**
-
-- Displays a snack bar when a timer completes, accompanied by a persistent notification sound until dismissed.
-- Resolved the console error that occurred when the snack bar dismiss button was clicked.
-
-### 3. **Reusable Components**
-
-- Extracted common buttons used in the Add/Edit Timer Modal into a reusable component.
-- Consolidated modal logic to use a single component for both adding and editing timers, eliminating code duplication.
-
-### 4. **Validation Feedback**
-
-- Added an error snack bar for invalid form submissions, providing immediate feedback to the user.
-
-### 5. **Responsive Snack Bar Placement**
-
-- **Desktop Devices**: Snack bars appear in the top-right corner.
-- **Mobile Devices**: Snack bars appear at the bottom of the screen.
-
-### 6. **Timer Persistence**
-
-- Leveraged `localStorage` to save and restore timers across page refreshes, ensuring seamless user experience.
-
-### 7. **Testing**
-
-- Added unit tests for `validation.ts` to verify all validation rules.
-
----
-
-## **Enhancements Made**
-
-- Improved the snack bar UX with subtle animations.
-- Refactored modal code for cleaner logic and easier scalability.
-- Enhanced error handling for better user feedback.
-
----
-
-## **Screenshots**
-
-### **Simultaneous Timers**
-
-![Simultaneous Timers Screenshot](https://i.ibb.co/N2JMHQG/Screenshot-2025-01-08-100451.png)
-
-### **Snack Bar Notifications**
-
-![Snack Bar Screenshot](https://i.ibb.co/k4nsK5Q/Screenshot-2025-01-08-100639.png)
-
-### **Add/Edit Timer Modal**
-
-![Modal Screenshot](https://i.ibb.co/Vg73xPs/Screenshot-2025-01-08-101136.png)
 
 ## **How to Use**
 
