@@ -12,15 +12,15 @@ Check here the [demo](https://codewalnut-timer.onrender.com/)
 
 ### **Simultaneous Timers**
 
-![Simultaneous Timers Screenshot](https://i.ibb.co/N2JMHQG/Screenshot-2025-01-08-100451.png)
+![Simultaneous Timers Screenshot](https://github.com/kavaskar786/CodeWalnut-timer/blob/2a9e41aa7256dbddbca4efd8160bc5e5b42458a0/src/images/Screenshot%202025-01-08%20101136.png)
 
 ### **Snack Bar Notifications**
 
-![Snack Bar Screenshot](https://i.ibb.co/k4nsK5Q/Screenshot-2025-01-08-100639.png)
+![Snack Bar Screenshot](https://github.com/kavaskar786/CodeWalnut-timer/blob/2a9e41aa7256dbddbca4efd8160bc5e5b42458a0/src/images/Screenshot%202025-01-08%20100639.png)
 
 ### **Add/Edit Timer Modal**
 
-![Modal Screenshot](https://i.ibb.co/Vg73xPs/Screenshot-2025-01-08-101136.png)
+![Modal Screenshot](https://github.com/kavaskar786/CodeWalnut-timer/blob/2a9e41aa7256dbddbca4efd8160bc5e5b42458a0/src/images/Screenshot%202025-01-08%20101136.png)
 
 ## **Features**
 
