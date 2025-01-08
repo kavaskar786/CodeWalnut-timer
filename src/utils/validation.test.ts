@@ -10,7 +10,6 @@ vi.mock("sonner", () => ({
 }));
 
 describe("validateTimerForm", () => {
-  // Reset mock before each test
   beforeEach(() => {
     vi.clearAllMocks();
   });
