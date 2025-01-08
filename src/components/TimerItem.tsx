@@ -143,19 +143,21 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
                 variant="icon"
                 icon={Pencil}
                 onClick={() => setIsEditModalOpen(true)}
+                className="text-blue-500 hover:bg-blue-50"
                 title="Edit Timer"
               />
               <Button
                 variant="icon"
                 icon={RotateCcw}
                 onClick={handleRestart}
+                className="text-blue-500 hover:bg-blue-50"
                 title="Restart Timer"
               />
               <Button
                 variant="icon"
                 icon={Trash2}
                 onClick={handleDelete}
-                className="text-red-500 hover:bg-red-50"
+                className="text-red-500 hover:bg-red-50 "
                 title="Delete Timer"
               />
             </div>
