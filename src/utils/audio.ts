@@ -1,10 +1,13 @@
-// audio.ts
 export class TimerAudio {
   private static instance: TimerAudio;
   private audioContext: AudioContext | null = null;
   private oscillator: OscillatorNode | null = null;
   private gainNode: GainNode | null = null;
   private isPlaying: boolean = false;
+  private intervalId: number | null = null;
+
+  private readonly soundDuration: number = 200;
+  private readonly gapDuration: number = 200;
 
   private constructor() {}
 
@@ -39,29 +42,13 @@ export class TimerAudio {
 
       this.isPlaying = true;
 
-      // Create and configure oscillator
-      this.oscillator = this.audioContext.createOscillator();
-      this.gainNode = this.audioContext.createGain();
+      // Create the sound pattern interval
+      this.intervalId = window.setInterval(() => {
+        this.playOneBeep();
+      }, this.soundDuration + this.gapDuration);
 
-      this.oscillator.type = "sine";
-      this.oscillator.frequency.setValueAtTime(
-        880,
-        this.audioContext.currentTime
-      );
-
-      // Configure gain for continuous sound
-      this.gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
-      this.gainNode.gain.linearRampToValueAtTime(
-        0.5,
-        this.audioContext.currentTime + 0.01
-      );
-
-      // Connect nodes
-      this.oscillator.connect(this.gainNode);
-      this.gainNode.connect(this.audioContext.destination);
-
-      // Start the oscillator without stopping
-      this.oscillator.start(this.audioContext.currentTime);
+      // Play the first beep immediately
+      this.playOneBeep();
     } catch (error) {
       console.error("Failed to play audio:", error);
     }
@@ -69,20 +56,64 @@ export class TimerAudio {
     return this;
   }
 
+  private playOneBeep(): void {
+    if (!this.audioContext) return;
+
+    // Create and configure oscillator
+    this.oscillator = this.audioContext.createOscillator();
+    this.gainNode = this.audioContext.createGain();
+
+    this.oscillator.type = "sine";
+    this.oscillator.frequency.setValueAtTime(
+      880,
+      this.audioContext.currentTime
+    );
+
+    // Configure gain for a single beep
+    this.gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
+    this.gainNode.gain.linearRampToValueAtTime(
+      0.5,
+      this.audioContext.currentTime + 0.01
+    );
+    this.gainNode.gain.setValueAtTime(
+      0.5,
+      this.audioContext.currentTime + 0.01
+    );
+    this.gainNode.gain.linearRampToValueAtTime(
+      0,
+      this.audioContext.currentTime + this.soundDuration / 1000
+    );
+
+    // Connect nodes
+    this.oscillator.connect(this.gainNode);
+    this.gainNode.connect(this.audioContext.destination);
+
+    // Start and stop the oscillator for this beep
+    this.oscillator.start(this.audioContext.currentTime);
+    this.oscillator.stop(
+      this.audioContext.currentTime + this.soundDuration / 1000
+    );
+
+    // Cleanup after the beep
+    this.oscillator.onended = () => {
+      this.oscillator?.disconnect();
+      this.gainNode?.disconnect();
+      this.oscillator = null;
+      this.gainNode = null;
+    };
+  }
+
   stop(): void {
     if (!this.isPlaying) {
       return;
     }
 
-    if (this.gainNode && this.audioContext) {
-      this.gainNode.gain.linearRampToValueAtTime(
-        0,
-        this.audioContext.currentTime + 0.1
-      );
-      setTimeout(() => this.cleanup(), 100);
-    } else {
-      this.cleanup();
+    if (this.intervalId !== null) {
+      window.clearInterval(this.intervalId);
+      this.intervalId = null;
     }
+
+    this.cleanup();
   }
 
   private cleanup(): void {
