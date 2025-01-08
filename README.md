@@ -65,49 +65,6 @@ Check here the [demo](https://codewalnut-timer.onrender.com/)
    npm vitest
    ```
 
----
-
-## **Implemented Features**
-
-### 1. **Simultaneous Timers**
-
-- Updated the app to allow multiple timers to run concurrently, ensuring each timer operates independently.
-
-### 2. **Snack Bar Notifications**
-
-- Displays a snack bar when a timer completes, accompanied by a persistent notification sound until dismissed.
-- Resolved the console error that occurred when the snack bar dismiss button was clicked.
-
-### 3. **Reusable Components**
-
-- Extracted common buttons used in the Add/Edit Timer Modal into a reusable component.
-- Consolidated modal logic to use a single component for both adding and editing timers, eliminating code duplication.
-
-### 4. **Validation Feedback**
-
-- Added an error snack bar for invalid form submissions, providing immediate feedback to the user.
-
-### 5. **Responsive Snack Bar Placement**
-
-- **Desktop Devices**: Snack bars appear in the top-right corner.
-- **Mobile Devices**: Snack bars appear at the bottom of the screen.
-
-### 6. **Timer Persistence**
-
-- Leveraged `localStorage` to save and restore timers across page refreshes, ensuring seamless user experience.
-
-### 7. **Testing**
-
-- Added unit tests for `validation.ts` to verify all validation rules.
-
----
-
-## **Enhancements Made**
-
-- Improved the snack bar UX with subtle animations.
-- Refactored modal code for cleaner logic and easier scalability.
-- Enhanced error handling for better user feedback.
-
 ## **How to Use**
 
 1. **Add a Timer**:
