@@ -6,6 +6,22 @@ A feature-rich Timer App built using React, Vite, Tailwind CSS, and Vitest. This
 
 Check here the [demo](https://codewalnut-timer.onrender.com/)
 
+---
+
+## **Sample Screenshots**
+
+### **Simultaneous Timers**
+
+![Simultaneous Timers Screenshot](https://i.ibb.co/N2JMHQG/Screenshot-2025-01-08-100451.png)
+
+### **Snack Bar Notifications**
+
+![Snack Bar Screenshot](https://i.ibb.co/k4nsK5Q/Screenshot-2025-01-08-100639.png)
+
+### **Add/Edit Timer Modal**
+
+![Modal Screenshot](https://i.ibb.co/Vg73xPs/Screenshot-2025-01-08-101136.png)
+
 ## **Features**
 
 - **Simultaneous Timers**: Run and manage multiple timers concurrently.
@@ -91,22 +107,6 @@ Check here the [demo](https://codewalnut-timer.onrender.com/)
 - Improved the snack bar UX with subtle animations.
 - Refactored modal code for cleaner logic and easier scalability.
 - Enhanced error handling for better user feedback.
-
----
-
-## **Screenshots**
-
-### **Simultaneous Timers**
-
-![Simultaneous Timers Screenshot](https://i.ibb.co/N2JMHQG/Screenshot-2025-01-08-100451.png)
-
-### **Snack Bar Notifications**
-
-![Snack Bar Screenshot](https://i.ibb.co/k4nsK5Q/Screenshot-2025-01-08-100639.png)
-
-### **Add/Edit Timer Modal**
-
-![Modal Screenshot](https://i.ibb.co/Vg73xPs/Screenshot-2025-01-08-101136.png)
 
 ## **How to Use**
 
