@@ -26,7 +26,7 @@ const saveState = (state: { timers: Timer[] }) => {
 
 const initialState = loadState();
 
-const timerSlice = createSlice({
+export const timerSlice = createSlice({
   name: "timer",
   initialState,
   reducers: {

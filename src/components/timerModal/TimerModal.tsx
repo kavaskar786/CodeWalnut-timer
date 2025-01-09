@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { X, Clock } from "lucide-react";
 import { toast } from "sonner";
-import { useTimerStore } from "../store/useTimerStore";
-import { validateTimerForm } from "../utils/validation";
-import { Timer } from "../types/timer";
-import { Button } from "./Button";
-import { getToastPosition } from "../utils/toast";
+import { useTimerStore } from "../../store/useTimerStore";
+import { validateTimerForm } from "../../utils/validation";
+import { Timer } from "../../types/timer";
+import { Button } from "../button/Button";
+import { getToastPosition } from "../../utils/toast";
 
 interface TimerModalProps {
   isOpen: boolean;
@@ -189,10 +189,14 @@ export const TimerModal: React.FC<TimerModalProps> = ({
             </label>
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm text-gray-600 mb-1">
+                <label
+                  htmlFor="hours-input"
+                  className="block text-sm text-gray-600 mb-1"
+                >
                   Hours
                 </label>
                 <input
+                  id="hours-input"
                   type="number"
                   min="0"
                   max="23"

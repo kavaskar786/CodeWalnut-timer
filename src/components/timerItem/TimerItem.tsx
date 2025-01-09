@@ -1,16 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Trash2, RotateCcw, Pencil } from "lucide-react";
-import { Timer } from "../types/timer";
-import { formatTime } from "../utils/time";
-import { useTimerStore } from "../store/useTimerStore";
+import { Timer } from "../../types/timer";
+import { formatTime } from "../../utils/time";
+import { useTimerStore } from "../../store/useTimerStore";
 import { toast } from "sonner";
 
-import { TimerAudio } from "../utils/audio";
-import { TimerControls } from "./TimerControls";
-import { TimerProgress } from "./TimerProgress";
-import { Button } from "./Button";
-import { TimerModal } from "./TimerModal";
-import { getToastPosition } from "../utils/toast";
+import { TimerAudio } from "../../utils/audio";
+import { TimerControls } from "../timerControls/TimerControls";
+import { TimerProgress } from "../timerProgress/TimerProgress";
+import { Button } from "../button/Button";
+import { TimerModal } from "../timerModal/TimerModal";
+import { getToastPosition } from "../../utils/toast";
 
 interface TimerItemProps {
   timer: Timer;
