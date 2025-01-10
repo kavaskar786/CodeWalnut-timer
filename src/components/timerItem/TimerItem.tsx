@@ -35,7 +35,7 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
         // Check if timer just ended
         if (timer.remainingTime <= 1 && !hasEndedRef.current) {
           hasEndedRef.current = true;
-          const audioInstance = timerAudio.play();
+          const audioInstance = timerAudio.play(timer.id);
 
           toastIdRef.current = toast.success(
             `Timer "${timer.title}" has ended!`,
@@ -44,7 +44,7 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
               action: {
                 label: "Dismiss",
                 onClick: () => {
-                  audioInstance.then((instance) => instance.stop());
+                  audioInstance.then(() => timerAudio.stop(timer.id));
                   if (toastIdRef.current) {
                     toast.dismiss(toastIdRef.current);
                   }
@@ -62,10 +62,8 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
     return () => {
       if (interval) {
         clearInterval(interval);
-
         intervalRef.current = null;
       }
-      TimerAudio.getInstance().stop();
     };
   }, [timer.isRunning, timer.remainingTime, timer.id, timer.title]);
 
@@ -88,7 +86,7 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
       toast.dismiss(toastIdRef.current);
       toastIdRef.current = null;
     }
-    timerAudio.stop();
+    timerAudio.stop(timer.id);
     restartTimer(timer.id);
   };
 
@@ -101,10 +99,9 @@ export const TimerItem: React.FC<TimerItemProps> = ({ timer }) => {
       toast.dismiss(toastIdRef.current);
       toastIdRef.current = null;
     }
-    timerAudio.stop();
+    timerAudio.stop(timer.id);
     deleteTimer(timer.id);
   };
-
   return (
     <>
       <div className="relative bg-white rounded-xl shadow-lg p-6 transition-transform hover:scale-102 overflow-hidden">
