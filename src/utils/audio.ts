@@ -1,12 +1,16 @@
+import audioFile from "../asset/audio/audio1.mp3";
 export class TimerAudio {
   private static instance: TimerAudio;
-  private audioContext: AudioContext | null = null;
-  private oscillator: OscillatorNode | null = null;
-  private gainNode: GainNode | null = null;
-  private isPlaying: boolean = false;
-  private intervalId: number | null = null;
+  private audioElements: Map<
+    string,
+    {
+      audio: HTMLAudioElement;
+      intervalId: number | null;
+      isPlaying: boolean;
+    }
+  > = new Map();
 
-  private readonly soundDuration: number = 200;
+  private readonly soundDuration: number = 9000; // Adjust based on your audio file length
   private readonly gapDuration: number = 200;
 
   private constructor() {}
@@ -18,37 +22,37 @@ export class TimerAudio {
     return TimerAudio.instance;
   }
 
-  private async initializeAudioContext(): Promise<void> {
-    if (!this.audioContext) {
-      this.audioContext = new AudioContext();
-    }
+  private initializeAudioElement(timerId: string): void {
+    if (!this.audioElements.has(timerId)) {
+      const audio = new Audio(audioFile); // Make sure this path matches your audio file location
+      audio.load();
 
-    if (this.audioContext.state === "suspended") {
-      await this.audioContext.resume();
+      this.audioElements.set(timerId, {
+        audio,
+        intervalId: null,
+        isPlaying: false,
+      });
     }
   }
 
-  async play(): Promise<TimerAudio> {
-    if (this.isPlaying) {
+  async play(timerId: string): Promise<TimerAudio> {
+    if (this.audioElements.get(timerId)?.isPlaying) {
       return this;
     }
 
     try {
-      await this.initializeAudioContext();
-
-      if (!this.audioContext) {
-        throw new Error("AudioContext not initialized");
-      }
-
-      this.isPlaying = true;
+      // Initialize audio element if it doesn't exist
+      this.initializeAudioElement(timerId);
+      const timerData = this.audioElements.get(timerId)!;
+      timerData.isPlaying = true;
 
       // Create the sound pattern interval
-      this.intervalId = window.setInterval(() => {
-        this.playOneBeep();
+      timerData.intervalId = window.setInterval(() => {
+        this.playOneBeep(timerId);
       }, this.soundDuration + this.gapDuration);
 
       // Play the first beep immediately
-      this.playOneBeep();
+      this.playOneBeep(timerId);
     } catch (error) {
       console.error("Failed to play audio:", error);
     }
@@ -56,82 +60,40 @@ export class TimerAudio {
     return this;
   }
 
-  private playOneBeep(): void {
-    if (!this.audioContext) return;
+  private playOneBeep(timerId: string): void {
+    const timerData = this.audioElements.get(timerId);
+    if (!timerData || !timerData.audio) return;
 
-    // Create and configure oscillator
-    this.oscillator = this.audioContext.createOscillator();
-    this.gainNode = this.audioContext.createGain();
-
-    this.oscillator.type = "sine";
-    this.oscillator.frequency.setValueAtTime(
-      880,
-      this.audioContext.currentTime
-    );
-
-    // Configure gain for a single beep
-    this.gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
-    this.gainNode.gain.linearRampToValueAtTime(
-      0.5,
-      this.audioContext.currentTime + 0.01
-    );
-    this.gainNode.gain.setValueAtTime(
-      0.5,
-      this.audioContext.currentTime + 0.01
-    );
-    this.gainNode.gain.linearRampToValueAtTime(
-      0,
-      this.audioContext.currentTime + this.soundDuration / 1000
-    );
-
-    // Connect nodes
-    this.oscillator.connect(this.gainNode);
-    this.gainNode.connect(this.audioContext.destination);
-
-    // Start and stop the oscillator for this beep
-    this.oscillator.start(this.audioContext.currentTime);
-    this.oscillator.stop(
-      this.audioContext.currentTime + this.soundDuration / 1000
-    );
-
-    // Cleanup after the beep
-    this.oscillator.onended = () => {
-      this.oscillator?.disconnect();
-      this.gainNode?.disconnect();
-      this.oscillator = null;
-      this.gainNode = null;
-    };
+    // Reset audio to start and play
+    timerData.audio.currentTime = 0;
+    timerData.audio.play().catch((error) => {
+      console.error("Error playing audio:", error);
+    });
   }
 
-  stop(): void {
-    if (!this.isPlaying) {
+  stop(timerId: string): void {
+    const timerData = this.audioElements.get(timerId);
+    if (!timerData?.isPlaying) {
       return;
     }
 
-    if (this.intervalId !== null) {
-      window.clearInterval(this.intervalId);
-      this.intervalId = null;
+    if (timerData.intervalId !== null) {
+      window.clearInterval(timerData.intervalId);
+      timerData.intervalId = null;
     }
 
-    this.cleanup();
+    this.cleanup(timerId);
   }
 
-  private cleanup(): void {
-    this.isPlaying = false;
+  private cleanup(timerId: string): void {
+    const timerData = this.audioElements.get(timerId);
+    if (!timerData) return;
 
-    if (this.oscillator) {
-      try {
-        this.oscillator.stop();
-        this.oscillator.disconnect();
-      } catch (error) {
-        console.log(error);
-      }
-      this.oscillator = null;
-    }
+    timerData.isPlaying = false;
 
-    if (this.gainNode) {
-      this.gainNode.disconnect();
-      this.gainNode = null;
+    if (timerData.audio) {
+      timerData.audio.pause();
+      timerData.audio.currentTime = 0;
     }
   }
 }

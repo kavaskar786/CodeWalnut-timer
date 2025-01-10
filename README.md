@@ -46,7 +46,7 @@ Check here the [demo](https://codewalnut-timer.onrender.com/)
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/CW-Codewalnut/timer.git
+   git clone https://github.com/kavaskar786/CodeWalnut-timer.git
    ```
 2. **Navigate to the Project Directory**:
    ```bash

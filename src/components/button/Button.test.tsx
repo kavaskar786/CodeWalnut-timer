@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Button } from "./Button";
-import { Camera } from "lucide-react";
+import { Pencil } from "lucide-react";
 
 describe("Button", () => {
   it("renders with default props", () => {
@@ -20,7 +20,7 @@ describe("Button", () => {
     expect(screen.getByText("Danger").className).toContain("bg-red-50");
 
     rerender(
-      <Button variant="icon" icon={Camera}>
+      <Button variant="icon" icon={Pencil}>
         Icon
       </Button>
     );
@@ -28,17 +28,17 @@ describe("Button", () => {
   });
 
   it("applies different sizes correctly", () => {
-    const { rerender } = render(<Button size="sm">Small</Button>);
+    render(<Button size="sm">Small</Button>);
     expect(screen.getByText("Small").className).toContain(
       "px-3 py-1.5 text-sm"
     );
 
-    rerender(<Button size="lg">Large</Button>);
+    render(<Button size="lg">Large</Button>);
     expect(screen.getByText("Large").className).toContain("px-6 py-3 text-lg");
   });
 
   it("renders icon correctly", () => {
-    render(<Button icon={Camera}>With Icon</Button>);
+    render(<Button icon={Pencil}>With Icon</Button>);
     const button = screen.getByText("With Icon");
     const svg = button.querySelector("svg");
     expect(svg).toBeInTheDocument();
